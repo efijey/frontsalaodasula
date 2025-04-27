@@ -1,0 +1,46 @@
+<div class="container">
+    <h2>Meus Clientes</h2>
+
+    <button type="button" class="btn btn-success mb-3" (click)=abrirModal()>+ Novo Cliente</button>
+
+    <div class="table-responsive">
+    <table class="table table-hover table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>Data de Nascimento</th>
+                <th>Visualizar</th>
+                <th>Editar</th>
+                <th>Remover</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let c of clientes">
+                <td>{{c.id}}</td>
+                <td>{{c.nome}}</td>
+                <td>{{c.telefone}}</td>
+                <td>{{c.dataNascimento | date:'dd/MM/yyyy'}}</td>
+                <td><button input="button" (click)=abrirModalDetalhes(c) class="btn btn-info btn-sm"><i class="bi bi-eye"></i>Ver</button></td>
+                <td><button input="button" (click)=abrirModal(c) class ="btn btn-warning btn-sm me-1"><i class="bi bi-pencil-square"></i>Editar</button></td>
+                <td><button input="button" (click)=deletarCliente(c.id) class ="btn btn-danger btn-sm"><i class="bi bi-trash"></i>Remover</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+
+<app-modal-cliente
+*ngIf="modalAberta"
+  [cliente]="clienteSelecionado"
+  (fechar)="fecharModal()"
+  (salvar)="salvarCliente($event)">
+</app-modal-cliente>
+
+<app-modal-ver-cliente
+*ngIf="modalDetalhesAberta"
+[cliente]="clienteSelecionadoDetalhes!"
+(fechar)="fecharModalDetalhes()">
+</app-modal-ver-cliente>

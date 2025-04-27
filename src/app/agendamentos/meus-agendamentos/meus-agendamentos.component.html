@@ -1,0 +1,51 @@
+<div class="container" >
+    <div class="d-flex flex-column justify-content-center align-items-center" style="height: 15vh;">
+        <h2>Meus Agendamentos</h2>
+    </div>
+    <button type="button" class="btn btn-success mb-3" (click)=abrirModal()>+ Novo Agendamento</button>
+
+
+    <div class="table-responsive">
+    <table class="table table-hover table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Cliente</th>
+                <th>Serviço</th>
+                <th>Valor</th>
+                <th>Data de Início</th>
+                <th>Previsão de Finalização</th>
+                <th>Status</th>
+                <th>Editar</th>
+                <th>Remover</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @for (agendamento of agendamentos; track agendamento.id) {
+            <tr>
+                <td>{{agendamento.id}}</td>
+                <td>{{agendamento.cliente.nome}}</td>
+                <td>{{agendamento.servico}}</td>
+                <td>{{agendamento.valor | currency:'BRL':'symbol'}}</td>
+                <td>{{agendamento.dataInicio | date:'dd/MM/yy HH:mm'}}</td>
+                <td>{{agendamento.dataFim | date:'dd/MM/yy HH:mm'}}</td>
+                <td>{{agendamento.status}}</td>
+                <td><button input="button" (click)=abrirModal(agendamento) class ="btn btn-warning btn-sm me-1"><i class="bi bi-pencil-square"></i> Editar</button></td>
+                <td><button input="button" (click)=deletarAgendamento(agendamento.id) class ="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Remover</button></td>
+
+            </tr>
+        }
+        </tbody>
+
+    </table>
+    </div>
+
+</div>
+
+<app-modal-agendamento
+*ngIf="modalAberto"
+  [agendamento]="agendamento"
+  (fechar)="fecharModal()"
+  (salvar)="salvarAgendamento($event)">
+</app-modal-agendamento>

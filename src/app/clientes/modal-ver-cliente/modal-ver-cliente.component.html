@@ -1,0 +1,43 @@
+<div class="modal fade show d-block" tabindex="1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Informações do Cliente</h5>
+                <button type="button" class="btn-close" (click)="fecharModal()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="cliente-info" *ngIf="cliente">
+                    <h3>Informações</h3>
+                    <div class="info-group">
+                        <p><strong>Nome:</strong> {{cliente.nome}}</p>
+                        <p><strong>Telefone:</strong> {{cliente.telefone}}</p>
+                        <p><strong>Data de Nascimento:</strong> {{cliente.dataNascimento}}</p>
+                        <p><strong>Sexo:</strong> {{cliente.sexo}}</p>
+                    </div>
+                </div>
+                <div class="agendamentos-section">
+                    <h3>Agendamentos</h3>
+
+                    <div class="agendamentos-list">
+                        <div *ngIf="agendamentos.length === 0" class="no-agentamentos">
+                            Nenhum agendamento encontrado.
+                        </div>
+
+                        <div *ngFor="let agendamento of agendamentos" class="agendamento-item">
+                            <div class="agendamento-info">
+                                <p><strong>Serviço:</strong> {{agendamento.servico}}</p>
+                                <p><strong>Valor:</strong> {{agendamento.valor}}</p>
+                                <p><strong>Data:</strong> {{agendamento.dataInicio | date:'dd/MM/yy HH:mm'}}</p>
+                                <p><strong>Status:</strong> {{agendamento.status}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button (click)="fecharModal()" class="btn-fechar">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>

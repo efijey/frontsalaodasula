@@ -1,0 +1,19 @@
+<div class="calendar-container">
+    <div class="calendar-header">
+      <h2>Agenda de Atendimentos</h2>
+      
+    </div>
+  
+    <div class="calendar-wrapper">
+      <full-calendar [options]="calendarOptions"></full-calendar>
+    </div>
+  
+    <!-- Modal Component -->
+    <app-modal-agendamento 
+      *ngIf="modalAberto"
+      [agendamento]="agendamentoSelecionado"
+      (fechar)="fecharModal()"
+      (salvar)="salvarAgendamento($event)">
+    </app-modal-agendamento>
+  </div>
+  
