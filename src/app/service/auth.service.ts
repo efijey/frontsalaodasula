@@ -25,7 +25,7 @@ export class AuthService {
     const request: AuthenticationRequest = { username, password };
     
     return new Observable(observer => {
-      this.http.post<AuthenticationResponse>(`${this.apiUrl}/login`, request).subscribe({
+      this.http.post<AuthenticationResponse>(`${this.apiUrl}/api/auth/login`, request).subscribe({
         next: (response) => {
           if (response.success && response.token) {
             localStorage.setItem('authToken', response.token);
