@@ -1,26 +1,17 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { AuthenticationRequest } from '../model/AuthenticationRequest';
-import { AuthenticationResponse } from '../model/AuthenticationResponse';
+import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
-  public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {
-    // Check if user is already logged in (from localStorage)
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      this.isAuthenticatedSubject.next(true);
-    }
-  }
+  constructor(private http: HttpClient) {}
 
+<<<<<<< HEAD
   login(username: string, password: string): Observable<boolean> {
     const request: AuthenticationRequest = { username, password };
     
@@ -33,27 +24,24 @@ export class AuthService {
             observer.next(true);
           } else {
             observer.next(false);
+=======
+  login(username: string, password: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/login`, { username, password })
+      .pipe(
+        tap((response: any) => {
+          if (response.token) {
+            localStorage.setItem('token', response.token);
+>>>>>>> 1b6bebca3cc7e4e151ce8794f4caf746a35943f2
           }
-          observer.complete();
-        },
-        error: () => {
-          observer.next(false);
-          observer.complete();
-        }
-      });
-    });
+        })
+      );
   }
 
   logout(): void {
-    localStorage.removeItem('authToken');
-    this.isAuthenticatedSubject.next(false);
+    localStorage.removeItem('token');
   }
 
   isLoggedIn(): boolean {
-    return this.isAuthenticatedSubject.value;
-  }
-
-  getToken(): string | null {
-    return localStorage.getItem('authToken');
+    return !!localStorage.getItem('token');
   }
 } 
