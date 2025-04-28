@@ -3,11 +3,12 @@ import { AuthService } from './service/auth.service';
 import { Router, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { AsyncPipe, CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, AsyncPipe, CommonModule],
+  imports: [RouterOutlet, NavbarComponent, AsyncPipe, CommonModule, HttpClientModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

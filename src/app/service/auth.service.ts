@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { AuthenticationRequest } from '../model/AuthenticationRequest';
+import { AuthenticationResponse } from '../model/AuthenticationResponse';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -7,8 +11,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class AuthService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+  private apiUrl = environment.apiUrl;
 
-  constructor() {
+  constructor(private http: HttpClient) {
     // Check if user is already logged in (from localStorage)
     const token = localStorage.getItem('authToken');
     if (token) {
@@ -17,19 +22,25 @@ export class AuthService {
   }
 
   login(username: string, password: string): Observable<boolean> {
-    // TODO: Replace with actual API call
-    // For now, we'll simulate a successful login
-    if (username && password) {
-      localStorage.setItem('authToken', 'dummy-token');
-      this.isAuthenticatedSubject.next(true);
-      return new Observable(observer => {
-        observer.next(true);
-        observer.complete();
-      });
-    }
+    const request: AuthenticationRequest = { username, password };
+    
     return new Observable(observer => {
-      observer.next(false);
-      observer.complete();
+      this.http.post<AuthenticationResponse>(`${this.apiUrl}/login`, request).subscribe({
+        next: (response) => {
+          if (response.success && response.token) {
+            localStorage.setItem('authToken', response.token);
+            this.isAuthenticatedSubject.next(true);
+            observer.next(true);
+          } else {
+            observer.next(false);
+          }
+          observer.complete();
+        },
+        error: () => {
+          observer.next(false);
+          observer.complete();
+        }
+      });
     });
   }
 
@@ -40,5 +51,9 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return this.isAuthenticatedSubject.value;
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('authToken');
   }
 } 
