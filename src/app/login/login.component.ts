@@ -29,18 +29,18 @@ export class LoginComponent {
   onSubmit(): void {
     if (this.loginForm.valid) {
       const { username, password } = this.loginForm.value;
-      this.authService.login(username, password).subscribe(
-        success => {
-          if (success) {
+      this.authService.login(username, password).subscribe({
+        next: (response) => {
+          if (response.success) {
             this.router.navigate(['/agenda']);
           } else {
             this.errorMessage = 'Invalid username or password';
           }
         },
-        error => {
+        error: (error) => {
           this.errorMessage = 'An error occurred during login';
         }
-      );
+      });
     }
   }
 } 
